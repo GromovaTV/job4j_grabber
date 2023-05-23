@@ -1,4 +1,4 @@
-package ru.job4j;
+package ru.job4j.grabber;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -20,7 +20,7 @@ public class HabrCareerParse {
             Element linkElement = titleElement.child(0);
             String vacancyName = titleElement.text();
             String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
-            String dateTime = row.select(".basic-date").text();
+            String dateTime = row.select(".basic-date").first().attr("datetime");
             System.out.printf("%s %s %s%n", vacancyName, dateTime, link);
         });
     }
