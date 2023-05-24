@@ -52,10 +52,9 @@ public class HabrCareerParse implements Parse{
 
     @Override
     public List<Post> list(String path) {
-        HarbCareerDateTimeParser dtParser = new HarbCareerDateTimeParser();
         List<Post> posts = new ArrayList<>();
         int id = 0;
-        for (int pageNumber = 1; pageNumber < 2; pageNumber++) {
+        for (int pageNumber = 1; pageNumber < 5; pageNumber++) {
             String pageLink = String.format("%s?page=%d", path, pageNumber);
             System.out.printf("Page №%d%n", pageNumber);
             try {
@@ -63,12 +62,11 @@ public class HabrCareerParse implements Parse{
                 Document document = connection.get();
                 Elements rows = document.select(".vacancy-card__inner");
                 for (Element row : rows) {
-                    HabrCareerParse habrParser = new HabrCareerParse(dtParser);
                     Element titleElement = row.select(".vacancy-card__title").first();
                     Element linkElement = titleElement.child(0);
                     String vacancyName = titleElement.text();
                     String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
-                    String description = habrParser.retrieveDescription(link);
+                    String description = this.retrieveDescription(link);
                     String dateTime = row.select(".basic-date").first().attr("datetime");
                     Post post = new Post(id++, vacancyName, link, description, dateTimeParser.parse(dateTime));
                     posts.add(post);
