@@ -8,10 +8,14 @@ import org.jsoup.select.Elements;
 import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.HarbCareerDateTimeParser;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 public class HabrCareerParse implements Parse{
     private static final String SOURCE_LINK = "https://career.habr.com";
@@ -46,15 +50,24 @@ public class HabrCareerParse implements Parse{
     public static void main(String[] args) {
         HabrCareerParse habrCareerParse = new HabrCareerParse(new HarbCareerDateTimeParser());
         var list = habrCareerParse.list(PAGE_LINK);
-        list.forEach(System.out::println);
+        try (FileInputStream in = new FileInputStream(".\\src\\main\\resources\\app.properties")) {
+            Properties config = new Properties();
+            config.load(in);
+            PsqlStore store = new PsqlStore(config);
+            list.forEach(p -> store.save(p));
+            System.out.println(store.findById(42));
+            store.getAll().forEach(System.out::println);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public List<Post> list(String path) {
         List<Post> posts = new ArrayList<>();
         int id = 0;
-        for (int pageNumber = 1; pageNumber < 5; pageNumber++) {
+        for (int pageNumber = 1; pageNumber < 2; pageNumber++) {
             String pageLink = String.format("%s?page=%d", path, pageNumber);
             System.out.printf("Page №%d%n", pageNumber);
             try {
