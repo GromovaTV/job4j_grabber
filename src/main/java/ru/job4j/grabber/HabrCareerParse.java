@@ -8,10 +8,8 @@ import org.jsoup.select.Elements;
 import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.HarbCareerDateTimeParser;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +19,10 @@ public class HabrCareerParse implements Parse{
     private static final String SOURCE_LINK = "https://career.habr.com";
     private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
     private final DateTimeParser dateTimeParser;
+
+    public String getPageLink() {
+        return PAGE_LINK;
+    }
 
     public HabrCareerParse(DateTimeParser dateTimeParser) {
         this.dateTimeParser = dateTimeParser;
@@ -55,9 +57,6 @@ public class HabrCareerParse implements Parse{
             config.load(in);
             PsqlStore store = new PsqlStore(config);
             list.forEach(p -> store.save(p));
-            System.out.println(store.findById(42));
-            store.getAll().forEach(System.out::println);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

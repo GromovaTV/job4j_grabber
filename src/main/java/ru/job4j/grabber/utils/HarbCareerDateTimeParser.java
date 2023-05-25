@@ -4,6 +4,9 @@ import java.time.format.DateTimeFormatter;
 
 
 public class HarbCareerDateTimeParser implements DateTimeParser {
+    public HarbCareerDateTimeParser() {
+    }
+
     @Override
     public LocalDateTime parse(String parse) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
