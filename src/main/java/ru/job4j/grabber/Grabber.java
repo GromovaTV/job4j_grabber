@@ -4,16 +4,19 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.utils.HarbCareerDateTimeParser;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Properties;
+
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 public class Grabber implements Grab {
+
     private final Properties cfg = new Properties();
 
     public Store store() {
@@ -27,21 +30,24 @@ public class Grabber implements Grab {
     }
 
     public void cfg() throws IOException {
-        try (InputStream in = new FileInputStream(new File(".\\src\\main\\resources\\app.properties"))) {
+        try (InputStream in = new FileInputStream(
+                new File(".\\src\\main\\resources\\app.properties"))) {
             cfg.load(in);
         }
     }
 
     public void web(Store store) {
         new Thread(() -> {
-            try (ServerSocket server = new ServerSocket(Integer.parseInt(cfg.getProperty("port")))) {
+            try (ServerSocket server = new ServerSocket(
+                    Integer.parseInt(cfg.getProperty("port")))) {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
                     try (OutputStream out = socket.getOutputStream()) {
                         out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                         for (Post post : store.getAll()) {
-                            out.write
-                                    (post.toString().getBytes(Charset.forName("Windows-1251")));
+                            out.write(
+                                    post.toString().getBytes(
+                                            Charset.forName("Windows-1251")));
                             out.write(System.lineSeparator().getBytes());
                         }
                     } catch (IOException io) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class PsqlStore implements Store, AutoCloseable {
+
     private Connection cnn;
 
     public PsqlStore(Properties cfg) {
@@ -15,7 +16,6 @@ public class PsqlStore implements Store, AutoCloseable {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-        /* cnn = DriverManager.getConnection(...); */
         try {
             cnn = DriverManager.getConnection(
                     cfg.getProperty("url"),
@@ -30,10 +30,9 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public void save(Post post) {
         try (PreparedStatement statement =
-                     cnn.prepareStatement("insert into posts(name, text, link, created) " +
-                                     "values (?, ?, ?, ?) on conflict do nothing;",
+                     cnn.prepareStatement("insert into posts(name, text, link, created) "
+                                     + "values (?, ?, ?, ?) on conflict do nothing;",
                              Statement.RETURN_GENERATED_KEYS)) {
-//            statement.setInt(1, post.getId());
             statement.setString(1, post.getTitle());
             statement.setString(2, post.getDescription());
             statement.setString(3, post.getLink());
@@ -73,7 +72,8 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public Post findById(int id) {
         Post result = null;
-        try (PreparedStatement statement = cnn.prepareStatement("select * from posts where id = ?")) {
+        try (PreparedStatement statement = cnn.prepareStatement(
+                "select * from posts where id = ?")) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

@@ -1,8 +1,15 @@
-# job4j_grabber
+# Grabber
 
 ## О проекте
 
-Система запускается по расписанию. Период запуска указывается в настройках - app.properties.
-Первый сайт будет career.habr.com. В нем есть раздел https://career.habr.com/vacancies/java_developer. С ним будет идти работа.
-Программа должна считывать все вакансии относящиеся к Java и записывать их в базу.
-Доступ к интерфейсу будет через REST API.
+Parser for vacancies from the career.habr.com website. 
+Selects Java-related vacancies and saves them to the database.
+
+#### Dependencies
+
+* Java
+* Jsoup(parser)
+* Quartz(scheduler)
+* JDBC, PostgreSQL
+* Maven
+* Checkstyle

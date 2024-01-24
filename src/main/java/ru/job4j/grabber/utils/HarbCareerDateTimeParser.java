@@ -1,9 +1,10 @@
 package ru.job4j.grabber.utils;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class HarbCareerDateTimeParser implements DateTimeParser {
+
     public HarbCareerDateTimeParser() {
     }
 
@@ -16,7 +17,7 @@ public class HarbCareerDateTimeParser implements DateTimeParser {
 
     public static void main(String[] args) {
         HarbCareerDateTimeParser parser = new HarbCareerDateTimeParser();
-        LocalDateTime p= parser.parse("2023-05-23T16:27:03+03:00");
+        LocalDateTime p = parser.parse("2023-05-23T16:27:03+03:00");
         System.out.println(p.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 }

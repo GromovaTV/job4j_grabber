@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import ru.job4j.grabber.model.Post;
 import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.HarbCareerDateTimeParser;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,17 +16,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-public class HabrCareerParse implements Parse{
-    private static final String SOURCE_LINK = "https://career.habr.com";
-    private static final String PAGE_LINK = String.format("%s/vacancies/java_developer", SOURCE_LINK);
-    private final DateTimeParser dateTimeParser;
+public class HabrCareerParse implements Parse {
 
-    public String getPageLink() {
-        return PAGE_LINK;
-    }
+    private static final String SOURCE_LINK = "https://career.habr.com";
+    private static final String PAGE_LINK
+            = String.format("%s/vacancies/java_developer", SOURCE_LINK);
+    private final DateTimeParser dateTimeParser;
 
     public HabrCareerParse(DateTimeParser dateTimeParser) {
         this.dateTimeParser = dateTimeParser;
+    }
+
+    public String getPageLink() {
+        return PAGE_LINK;
     }
 
     private String retrieveDescription(String link) {
@@ -79,8 +82,10 @@ public class HabrCareerParse implements Parse{
                     String vacancyName = titleElement.text();
                     String link = String.format("%s%s", SOURCE_LINK, linkElement.attr("href"));
                     String description = this.retrieveDescription(link);
-                    String dateTime = row.select(".basic-date").first().attr("datetime");
-                    Post post = new Post(id++, vacancyName, link, description, dateTimeParser.parse(dateTime));
+                    String dateTime = row.select(".basic-date")
+                            .first().attr("datetime");
+                    Post post = new Post(id++, vacancyName, link, description,
+                            dateTimeParser.parse(dateTime));
                     posts.add(post);
                 }
             } catch (Exception e) {
